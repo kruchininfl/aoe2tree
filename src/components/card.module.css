@@ -1,0 +1,71 @@
+.card {
+  display: inline-block;
+  border: 5px solid transparent;
+  position: relative;
+}
+
+.card_build {
+  border-color: #751E02;
+}
+
+.card_unit {
+  border-color: #3A6A80;
+}
+
+.card_tech {
+  border-color: #234621;
+}
+
+.card_disabled {
+  opacity: 0.7;
+
+  &:after,
+  &:before {
+    content: "";
+    position: absolute;
+    width: 110%;
+    height: 5px;
+    background: red;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  &:after {
+    transform: rotate(45deg);
+  }
+
+  &:before {
+    transform: rotate(-45deg);
+  }
+}
+
+.card__img {
+  display: block;
+}
+
+.circles {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 5px 0;
+}
+
+.circles__item {
+  width: 5px;
+  height: 5px;
+  background: red;
+  margin: 0 1px;
+  border-radius: 50%;
+  border: 1px solid #ffffff;
+}
+
+.circles__item_enabled {
+  background: green;
+}
