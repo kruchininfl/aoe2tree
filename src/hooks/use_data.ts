@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { EBuild, tree } from "../fixtures/tree.ts";
+import { EBuild, tree } from "src/fixtures/tree.ts";
+import { request } from "src/utils/request.ts";
+import { config } from "src/config.ts";
 
 export type TechTreeCiv = "Aztecs" | "Bengalis" | "Berbers" | "Bohemians" | "Britons" | "Bulgarians" | "Burgundians" | "Burmese" | "Byzantines" | "Celts" | "Chinese" | "Cumans" | "Dravidians" | "Ethiopians" | "Franks" | "Goths" | "Gurjaras" | "Hindustanis" | "Huns" | "Incas" | "Italians" | "Japanese" | "Khmer" | "Koreans" | "Lithuanians" | "Magyars" | "Malay" | "Malians" | "Mayans" | "Mongols" | "Persians" | "Poles" | "Portuguese" | "Romans" | "Saracens" | "Sicilians" | "Slavs" | "Spanish" | "Tatars" | "Teutons" | "Turks" | "Vietnamese" | "Vikings";
 
@@ -7,15 +9,24 @@ export type TechTreeData = {
   civ_helptexts: Record<TechTreeCiv, string>;
   civ_names: Record<TechTreeCiv, string>;
   techtrees: Record<TechTreeCiv, {
-    buildings: EBuild[],
-    techs: number[];
+    buildings: Array<{
+      id: EBuild;
+      age: number;
+    }>,
+    techs: Array<{
+      id: number;
+      age: number;
+    }>;
     unique: {
       castleAgeUniqueTech: number;
       castleAgeUniqueUnit: number;
       imperialAgeUniqueTech: number;
       imperialAgeUniqueUnit: number;
     },
-    units: number[];
+    units: Array<{
+      id: number;
+      age: number;
+    }>;
   }>;
   data: {
     units: Record<string, {
@@ -27,20 +38,7 @@ export type TechTreeData = {
 
 export type TechTreeStrings = Record<number, string>;
 
-const BASE_URL = "https://aoe2techtree.net/data";
-
-const _fetch = <Resp>(url: string): Promise<Resp | undefined> => fetch(url).then((resp) => {
-  if (resp.ok) {
-    return resp.json() as Resp;
-  }
-
-  throw new Error("ApiError");
-}).catch((e) => {
-  console.error(e);
-  return undefined;
-})
-
-export const useData = () => {
+export const useDataTechTree = () => {
   const [isLoading, setLoading] = useState(false);
   const [respData, setRespData] = useState<TechTreeData | undefined>();
   const [respStrings, setRespStrings] = useState<TechTreeStrings | undefined>();
@@ -50,8 +48,8 @@ export const useData = () => {
       setLoading(true);
 
       const [resp1, resp2] = await Promise.all([
-        _fetch<TechTreeData>(`${BASE_URL}/data.json`),
-        _fetch<TechTreeStrings>(`${BASE_URL}/locales/ru/strings.json`),
+        request<TechTreeData>(`${config.API_AOE2TECHTREE_BASE}/data.json`),
+        request<TechTreeStrings>(`${config.API_AOE2TECHTREE_BASE}/locales/ru/strings.json`),
       ]);
 
       setRespData(resp1);

@@ -1,13 +1,13 @@
 import classes from "./App.module.css";
-import { useData } from "./hooks/use_data.ts";
 import { useMemo, useState } from "react";
 import { produce } from "immer";
 import clsx from "clsx";
 import { getPic } from "./utils/get_pic.ts";
 import { CardGroup } from "./components/card_group.tsx";
 import { EBuild } from "./fixtures/tree.ts";
+import { useDataTechTree } from "src/hooks/use_data.ts";
 
-type Civ = keyof NonNullable<ReturnType<typeof useData>["datasets"]>["civ_names"];
+type Civ = keyof NonNullable<ReturnType<typeof useDataTechTree>["datasets"]>["civ_names"];
 
 const WAR_BUILDS_SORTING = [EBuild.BARRACKS, EBuild.HORSE_STABLE, EBuild.ARCHERY, EBuild.ENGINE, EBuild.SMITHY];
 
@@ -16,7 +16,7 @@ function App() {
     datasets,
     strings,
     tree,
-  } = useData();
+  } = useDataTechTree();
 
   const [selectedCivs, setSelectedCivs] = useState<Map<Civ, boolean>>(new Map());
 

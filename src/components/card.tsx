@@ -36,13 +36,13 @@ export const Card: FC<Props> = (props) => {
 
   const isDisabled = useMemo(() => {
     if (props.type === "build") {
-      return !props.civData.buildings.includes(props.id);
+      return !props.civData.buildings.some(({ id }) => id === props.id);
     } else if (props.type === "unit") {
-      return !props.chain.some((id) => props.civData.units.includes(id));
+      return !props.chain.some((id) => props.civData.units.some((unit) => unit.id === id));
     } else if (props.type === "tech") {
-      return !props.civData.techs.includes(props.id);
+      return !props.civData.techs.some(({ id }) => id === props.id);
     } else if (props.type === "tech_chain") {
-      return !props.chain.some((id) => props.civData.techs.includes(id));
+      return !props.chain.some((id) => props.civData.techs.some((tech) => tech.id === id));
     }
 
     return false;
@@ -70,9 +70,9 @@ export const Card: FC<Props> = (props) => {
           {props.chain.map((item, idx) => {
             const enabled = (() => {
               if (props.type === "unit") {
-                return props.civData.units.includes(item);
+                return props.civData.units.some((unit) => unit.id === item);
               } else if (props.type === "tech_chain") {
-                return props.civData.techs.includes(item);
+                return props.civData.techs.some((tech) => tech.id === item);
               }
 
               return item !== 0;
